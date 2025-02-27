@@ -1,0 +1,16 @@
+{
+  "name": "omnisync-ingestor",
+  "version": "1.0.0",
+  "description": "OmniSync Sales Force CDC Ingestor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "salesforce-pubsub-api-client": "^5.2.3"
+  }
+}
