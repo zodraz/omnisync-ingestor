@@ -72,7 +72,7 @@ module omnisyncIngestorFetchLatestImage './modules/fetch-container-image.bicep' 
   name: 'omnisyncIngestor-fetch-image'
   params: {
     exists: omnisyncIngestorExists
-    name: 'omnisync-ingestor'
+     name: '${abbrs.appContainerApps}${resourceTokenApp}${resourceTokenSuffix}'
   }
 }
 
@@ -90,7 +90,7 @@ var omnisyncIngestorEnv = map(filter(omnisyncIngestorAppSettingsArray, i => i.?s
 module omnisyncIngestor 'br/public:avm/res/app/container-app:0.8.0' = {
   name: 'omnisyncIngestor'
   params: {
-    name: '${abbrs.appContainerApps}omnisync-prod-ne-01'
+    name: '${abbrs.appContainerApps}${resourceTokenApp}${resourceTokenSuffix}'
     ingressTargetPort: 80
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
