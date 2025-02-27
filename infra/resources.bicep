@@ -16,6 +16,7 @@ var abbrs = loadJsonContent('./abbreviations.json')
 var resourceTokenSuffix = '-prod-ne-01'
 var resourceTokenSuffixWithoutDashes = replace(resourceTokenSuffix, '-', '')
 var resourceTokenApp = 'omnisyncingestor'
+var resourceTokenRandom = substring(uniqueString(subscription().id, resourceGroup().id, location),0,2)
 
 // Monitor application with Azure Monitor
 module monitoring 'br/public:avm/ptn/azd/monitoring:0.1.0' = {
@@ -33,7 +34,7 @@ module monitoring 'br/public:avm/ptn/azd/monitoring:0.1.0' = {
 module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' = {
   name: 'registry'
   params: {
-    name: '${abbrs.containerRegistryRegistries}${resourceTokenApp}${resourceTokenSuffixWithoutDashes}'
+    name: '${abbrs.containerRegistryRegistries}${resourceTokenApp}${resourceTokenRandom}${resourceTokenSuffixWithoutDashes}'
     location: location
     acrAdminUserEnabled: true
     tags: tags
@@ -149,7 +150,7 @@ module omnisyncIngestor 'br/public:avm/res/app/container-app:0.8.0' = {
 module keyVault 'br/public:avm/res/key-vault/vault:0.6.1' = {
   name: 'keyvault'
   params: {
-    name: '${abbrs.keyVaultVaults}omnisync-prod-ne-02'
+    name: '${abbrs.keyVaultVaults}omnisync${resourceTokenRandom}${resourceTokenSuffix}'
     location: location
     tags: tags
     enableRbacAuthorization: false
