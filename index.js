@@ -7,12 +7,14 @@ async function run() {
         dotenv.config();
 
         // Build and connect Pub/Sub API client
-         const client = new PubSubApiClient({
+        const client = new PubSubApiClient({
                 authType: 'oauth-client-credentials',
                 loginUrl: process.env.SALESFORCE_LOGIN_URL,
                 clientId: process.env.SALESFORCE_CLIENT_ID,
                 clientSecret: process.env.SALESFORCE_CLIENT_SECRET
             });
+
+        console.log('Client connecting...');
         await client.connect();
 
         // Prepare event callback
