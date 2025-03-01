@@ -1,17 +1,23 @@
-FROM node:10-alpine
+# Use an official Node.js runtime as a parent image
+FROM node:current-alpine
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+# Set the working directory in the container
+WORKDIR /usr/src/app
 
-WORKDIR /home/node/app
-
+# Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
-USER node
-
+# Install dependencies
 RUN npm install
 
-COPY --chown=node:node . .
+# Copy the rest of the application source code to the container
+COPY . .
 
-EXPOSE 8080
+# Expose port 3000 to the outside world
+EXPOSE 3000
 
-CMD [ "node", "index.js" ]
+# Define environment variable
+ENV NODE_ENV=production
+
+# Command to run the application
+CMD ["node", "index.js"]
