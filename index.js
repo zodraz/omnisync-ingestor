@@ -29,18 +29,18 @@ async function run() {
                             `(${subscription.receivedEventCount}/${subscription.requestedEventCount} ` +
                             `events received so far)`
                     );
-                    // Safely log event payload as a JSON string
-                    console.log(
-                        JSON.stringify(
-                            data,
-                            (key, value) =>
-                                /* Convert BigInt values into strings and keep other types unchanged */
-                                typeof value === 'bigint'
-                                    ? value.toString()
-                                    : value,
-                            2
-                        )
+
+                    const dataStr = JSON.stringify(
+                        data,
+                        (key, value) =>
+                            /* Convert BigInt values into strings and keep other types unchanged */
+                            typeof value === 'bigint'
+                                ? value.toString()
+                                : value,
+                        2
                     );
+                    // Safely log event payload as a JSON string
+                    console.log(dataStr);
 
                     const client = new EventGridPublisherClient(
                         process.env.AZURE_EVENT_GRID_ENDPOINT,
@@ -48,15 +48,19 @@ async function run() {
                         new AzureKeyCredential(process.env.AZURE_EVENT_GRID_ACCESS_TOKEN),
                       );
                     
+                    const changeEventType =
+                        data.payload.ChangeEventHeader.changeType.toLowerCase().charAt(0).toUpperCase() +
+                        data.payload.ChangeEventHeader.changeType.toLowerCase().slice(1);
+
                     // Send an event to the Event Grid Service, using the Cloud Event schema.
                     // A random ID will be generated for this event, since one is not provided.
                     await client.send([
                        {
-                            type: "createdcontact",
-                            subject:"ominisync-ingestor",
+                            type: data.payload.ChangeEventHeader.entityName + changeEventType,
+                            subject: data.replayId,
                             source: "/subscriptions/fd892721-fbea-4f9d-b961-db12a74a90a7/resourceGroups/rg-omnisylogicapps-prod-ne-01/providers/Microsoft.EventGrid/domains/omnisync/topics/salesforce",
                             data: {
-                                message: data
+                                message: dataStr
                             }
                         }
                     ]);
