@@ -52,6 +52,8 @@ async function run() {
                         data.payload.ChangeEventHeader.changeType.toLowerCase().charAt(0).toUpperCase() +
                         data.payload.ChangeEventHeader.changeType.toLowerCase().slice(1);
 
+                    console.log('Sending to EventGrid...');
+
                     // Send an event to the Event Grid Service, using the Cloud Event schema.
                     // A random ID will be generated for this event, since one is not provided.
                     await client.send([
