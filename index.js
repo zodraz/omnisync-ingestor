@@ -15,7 +15,7 @@ async function run() {
                 clientSecret: process.env.SALESFORCE_CLIENT_SECRET
             });
 
-        console.log('Client connecting...');
+        console.log('Client connecting2222222222222...');
         await client.connect();
 
         // Prepare event callback
