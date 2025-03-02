@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import PubSubApiClient from 'salesforce-pubsub-api-client';
+import { EventGridPublisherClient, AzureKeyCredential } from "@azure/eventgrid";
 
 async function run() {
     try {
@@ -18,7 +19,7 @@ async function run() {
         await client.connect();
 
         // Prepare event callback
-        const subscribeCallback = (subscription, callbackType, data) => {
+        const subscribeCallback = async (subscription, callbackType, data) => {
             switch (callbackType) {
                 case 'event':
                     // Event received
@@ -40,6 +41,25 @@ async function run() {
                             2
                         )
                     );
+
+                    const client = new EventGridPublisherClient(
+                        process.env.AZURE_EVENT_GRID_ENDPOINT,
+                        "CloudEvent",
+                        new AzureKeyCredential(process.env.AZURE_EVENT_GRID_ACCESS_TOKEN),
+                      );
+                    
+                    // Send an event to the Event Grid Service, using the Cloud Event schema.
+                    // A random ID will be generated for this event, since one is not provided.
+                    await client.send([
+                       {
+                            type: "createdcontact",
+                            subject:"ominisync-ingestor",
+                            source: "/subscriptions/fd892721-fbea-4f9d-b961-db12a74a90a7/resourceGroups/rg-omnisylogicapps-prod-ne-01/providers/Microsoft.EventGrid/domains/omnisync/topics/salesforce",
+                            data: {
+                                message: data
+                            }
+                        }
+                    ]);
                     break;
                 case 'lastEvent':
                     // Last event received
