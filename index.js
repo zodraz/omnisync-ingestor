@@ -16,7 +16,7 @@ async function run() {
                 clientSecret: process.env.SALESFORCE_CLIENT_SECRET
             });
 
-        console.log('Client connecting33333333333333333333333333333333333...');
+        console.log('Client about to connect...');
         await client.connect();
 
         // Prepare event callback
@@ -56,24 +56,18 @@ async function run() {
     
                         console.log('Sending to EventGrid...');
 
-                        setTimeout(async() => {
-                            console.log("3 Segundo esperado")
-                            // Send an event to the Event Grid Service, using the Cloud Event schema.
-                            // A random ID will be generated for this event, since one is not provided.
-                            await client.send([
-                                {
-                                    id: uuidv4(),
-                                    type: data.payload.ChangeEventHeader.entityName + changeEventType,
-                                    subject: data.replayId.toString(),
-                                    source: process.env.AZURE_EVENT_GRID_SOURCE,
-                                    data: {
-                                        message: dataStr
-                                    }
+                        await client.send([
+                            {
+                                id: uuidv4(),
+                                type: data.payload.ChangeEventHeader.entityName + changeEventType,
+                                subject: data.replayId.toString(),
+                                source: process.env.AZURE_EVENT_GRID_SOURCE,
+                                data: {
+                                    message: dataStr
                                 }
-                            ]);
-                          }, 3000);
+                            }
+                        ]);
     
-                        
                         break;
                     case 'lastEvent':
                         // Last event received
