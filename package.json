@@ -12,6 +12,7 @@
   "dependencies": {
     "@azure/eventgrid": "^5.11.0",
     "dotenv": "^16.4.7",
-    "salesforce-pubsub-api-client": "^5.2.3"
+    "salesforce-pubsub-api-client": "^5.2.3",
+    "uuid": "^11.1.0"
   }
 }

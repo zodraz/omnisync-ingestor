@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import PubSubApiClient from 'salesforce-pubsub-api-client';
 import { EventGridPublisherClient, AzureKeyCredential } from "@azure/eventgrid";
+import { v4 as uuidv4 } from 'uuid';
 
 async function run() {
     try {
@@ -15,7 +16,7 @@ async function run() {
                 clientSecret: process.env.SALESFORCE_CLIENT_SECRET
             });
 
-        console.log('Client connecting2222222222222...');
+        console.log('Client connecting...');
         await client.connect();
 
         // Prepare event callback
@@ -59,9 +60,10 @@ async function run() {
                         // A random ID will be generated for this event, since one is not provided.
                         await client.send([
                            {
+                                id: uuidv4(),
                                 type: data.payload.ChangeEventHeader.entityName + changeEventType,
                                 subject: data.replayId.toString(),
-                                source: process.env.AZURE_EVENT_GRID_TOPIC,
+                                source: process.env.AZURE_EVENT_GRID_SOURCE,
                                 data: {
                                     message: dataStr
                                 }
