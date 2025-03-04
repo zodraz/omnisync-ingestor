@@ -55,20 +55,25 @@ async function run() {
                             data.payload.ChangeEventHeader.changeType.toLowerCase().slice(1);
     
                         console.log('Sending to EventGrid...');
-    
-                        // Send an event to the Event Grid Service, using the Cloud Event schema.
-                        // A random ID will be generated for this event, since one is not provided.
-                        await client.send([
-                           {
-                                id: uuidv4(),
-                                type: data.payload.ChangeEventHeader.entityName + changeEventType,
-                                subject: data.replayId.toString(),
-                                source: process.env.AZURE_EVENT_GRID_SOURCE,
-                                data: {
-                                    message: dataStr
+
+                        setTimeout(async() => {
+                            console.log("3 Segundo esperado")
+                            // Send an event to the Event Grid Service, using the Cloud Event schema.
+                            // A random ID will be generated for this event, since one is not provided.
+                            await client.send([
+                                {
+                                    id: uuidv4(),
+                                    type: data.payload.ChangeEventHeader.entityName + changeEventType,
+                                    subject: data.replayId.toString(),
+                                    source: process.env.AZURE_EVENT_GRID_SOURCE,
+                                    data: {
+                                        message: dataStr
+                                    }
                                 }
-                            }
-                        ]);
+                            ]);
+                          }, 3000);
+    
+                        
                         break;
                     case 'lastEvent':
                         // Last event received
