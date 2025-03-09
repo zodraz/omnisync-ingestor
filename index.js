@@ -5,6 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 async function run() {
     try {
+
+        // Patch for BigInt serialization on JSON.stringify
+        BigInt.prototype.toJSON = function () {
+            return { $bigint: this.toString() };
+        };
+          
         // Load config from .env file
         dotenv.config();
 
