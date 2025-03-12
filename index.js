@@ -8,8 +8,9 @@ async function run() {
 
         // Patch for BigInt serialization on JSON.stringify
         BigInt.prototype.toJSON = function () {
-            return { $bigint: this.toString() };
-        };
+            const int = Number.parseInt(this.toString());
+            return int ?? this.toString();
+          };
           
         // Load config from .env file
         dotenv.config();
