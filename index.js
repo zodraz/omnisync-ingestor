@@ -38,6 +38,9 @@ async function run() {
                                 `(${subscription.receivedEventCount}/${subscription.requestedEventCount} ` +
                                 `events received so far)`
                         );
+
+                        //Override bigint since fixing the prototype doesn´t work all the times
+                        data.payload.ChangeEventHeader.commitNumber = 0;
     
                         const dataStr = JSON.stringify(
                             data,
