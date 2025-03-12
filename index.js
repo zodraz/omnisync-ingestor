@@ -66,7 +66,7 @@ async function run() {
                             {
                                 id: uuidv4(),
                                 type: data.payload.ChangeEventHeader.entityName + changeEventType,
-                                subject: data.replayId.toString(),
+                                subject: data.payload.ChangeEventHeader.entityName ,
                                 source: process.env.AZURE_EVENT_GRID_SOURCE,
                                 data: {
                                     message: dataStr
