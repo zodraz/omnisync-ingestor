@@ -40,6 +40,7 @@ async function run() {
                         );
 
                         //Override bigint since fixing the prototype doesn´t work all the times
+                        console.log('Setting commit number to 0 to avoid BigInt issues.');
                         data.payload.ChangeEventHeader.commitNumber = 0;
     
                         const dataStr = JSON.stringify(
