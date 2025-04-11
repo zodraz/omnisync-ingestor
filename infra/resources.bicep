@@ -16,7 +16,7 @@ var abbrs = loadJsonContent('./abbreviations.json')
 var resourceTokenSuffix = '-prod-ne-01'
 var resourceTokenSuffixWithoutDashes = replace(resourceTokenSuffix, '-', '')
 var resourceTokenApp = 'omnisyncingestor'
-var resourceTokenRandom = substring(uniqueString(subscription().id, resourceGroup().id, location),0,2)
+var resourceTokenRandom = substring(uniqueString(subscription().id, resourceGroup().id, location,'01'),0,2)
 
 // Monitor application with Azure Monitor
 module monitoring 'br/public:avm/ptn/azd/monitoring:0.1.0' = {
@@ -92,7 +92,7 @@ module omnisyncIngestor 'br/public:avm/res/app/container-app:0.8.0' = {
   params: {
     name: '${abbrs.appContainerApps}${resourceTokenApp}${resourceTokenSuffix}'
     disableIngress: true
-    scaleMinReplicas: 1
+    scaleMinReplicas: 0
     scaleMaxReplicas: 10
     secrets: {
       secureList:  union([
@@ -107,8 +107,8 @@ module omnisyncIngestor 'br/public:avm/res/app/container-app:0.8.0' = {
         image: omnisyncIngestorFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
         name: 'main'
         resources: {
-          cpu: json('0.5')
-          memory: '1.0Gi'
+          cpu: json('0.25')
+          memory: '0.5Gi'
         }
         env: union([
           {
