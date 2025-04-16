@@ -39,6 +39,16 @@ async function run() {
                                 `events received so far)`
                         );
 
+                        if ( data.payload.CreatedById && data.payload.CreatedById===process.env.SALESFORCE_USER_ID ) {
+                            console.log('Ignoring intgration sync user changes...');
+                            break;
+                        }
+
+                        if ( data.payload.LastModifiedById && data.payload.LastModifiedById===process.env.SALESFORCE_USER_ID ) {
+                            console.log('Ignoring intgration sync user changes...');
+                            break;
+                        }
+
                         //Override bigint since fixing the prototype doesn´t work all the times
                         console.log('Setting commit number to 0 to avoid BigInt issues.');
                         data.payload.ChangeEventHeader.commitNumber = 0;
